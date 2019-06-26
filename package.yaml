@@ -13,7 +13,9 @@ description: |
   Please see the README on GitHub at <https://github.com/duijf/schemactl>
 
 dependencies:
+- attoparsec
 - base >= 4.7 && < 5
+- bytestring
 - cryptonite
 - text
 
