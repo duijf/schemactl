@@ -14,9 +14,11 @@ description: |
 
 dependencies:
 - attoparsec
+- aeson
 - base >= 4.7 && < 5
 - bytestring
 - cryptonite
+- mtl
 - text
 
 library:
