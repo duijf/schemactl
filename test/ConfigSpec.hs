@@ -12,4 +12,4 @@ spec = do
     it "reports missing files" $ do
       let missingPath = "nosuchdir/schemactl.json"
       configOrErr <- runExceptT $ Config.loadFromFile missingPath
-      configOrErr `shouldSatisfy` (\err -> isLeft err && Config.isReadIOErr (fromLeft undefined err))
+      configOrErr `shouldSatisfy` (\err -> isLeft err && Config.isReadIoErr (fromLeft undefined err))

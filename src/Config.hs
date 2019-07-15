@@ -22,13 +22,26 @@ instance Aeson.FromJSON Config where
 
 data ConfigErr
   = JsonDecodeErr String
-  | ReadIOErr IOException
+  | ReadIoErr IOException
   deriving (Eq, Show)
+
+
+isReadIoErr :: ConfigErr -> Bool
+isReadIoErr e =
+  case e of
+    ReadIoErr _ -> True
+    _ -> False
+
+isJsonDecodeErr :: ConfigErr -> Bool
+isJsonDecodeErr e =
+  case e of
+    JsonDecodeErr _ -> True
+    _ -> False
 
 
 loadFromFile :: FilePath -> ExceptT ConfigErr IO Config
 loadFromFile configFile = do
-  contents <- liftIOCatching [isDoesNotExistError, isPermissionError] ReadIOErr (Bs.readFile configFile)
+  contents <- liftIOCatching [isDoesNotExistError, isPermissionError] ReadIoErr (Bs.readFile configFile)
   liftEither $ first JsonDecodeErr $ Aeson.eitherDecodeStrict contents
 
 
@@ -44,8 +57,3 @@ liftIOCatching guards excTransform action = do
         then Just $ excTransform exc
         else Nothing
   liftEither =<< (liftIO $ tryJust handler action)
-
-
-isReadIOErr :: ConfigErr -> Bool
-isReadIOErr (ReadIOErr _) = True
-isReadIOErr _ = False
